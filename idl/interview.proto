@@ -1,0 +1,18 @@
+//syntax = "proto3";
+//
+//package interview;
+//
+//option go_package = "./proto;interview";
+//
+//// 面试题结构体
+//message Question {
+//  string content = 1;       // 题目内容
+//  string knowledge_point = 2; // 考察知识点
+//}
+//
+//// 面试题列表响应
+//message QuestionsResponse {
+//  int32 code = 1;
+//  string message = 2;
+//  repeated Question questions = 3; // 面试题列表
+//}
