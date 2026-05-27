@@ -1,47 +1,30 @@
 package main
 
 import (
+	"awesomeProject4/backend/event"
 	"context"
-	"fmt"
-	"github.com/cloudwego/eino-ext/components/document/loader/file"
-	"github.com/cloudwego/eino-ext/components/document/parser/docx"
-	"github.com/cloudwego/eino/components/document"
-	"github.com/cloudwego/eino/components/document/parser"
+	"github.com/IBM/sarama"
+	"log"
 )
 
 func main() {
-	ctx := context.Background()
-	docxParser, err := docx.NewDocxParser(ctx, &docx.Config{})
+	server, consumerGroup, evaluationConsumer, err := InitializeServer()
 	if err != nil {
-		panic(err)
+		log.Fatalf("initialize server failed: %v", err)
 	}
-	extParser, err := parser.NewExtParser(ctx, &parser.ExtParserConfig{
-		FallbackParser: parser.TextParser{},
-		Parsers: map[string]parser.Parser{
-			".docx": docxParser,
-		},
-	})
-	if err != nil {
-		panic(err)
+	go runInterviewEvaluationConsumer(context.Background(), consumerGroup, evaluationConsumer)
+	if err := server.Run(":8080"); err != nil {
+		log.Fatalf("run server failed: %v", err)
 	}
-	loader, err := file.NewFileLoader(ctx, &file.FileLoaderConfig{
-		UseNameAsID: true,
-		Parser:      extParser,
-	})
-	if err != nil {
-		panic(err)
-	}
-	filePath := "C:/Users/jiahao li/Desktop/文件/稿子.docx"
-	docs, err := loader.Load(ctx, document.Source{
-		URI: filePath,
-	})
-	if err != nil {
-		panic(err)
-	}
-	for _, doc := range docs {
-		println(doc.String())
-		for k, v := range doc.MetaData {
-			fmt.Printf("%v:%v \n", k, v)
+}
+
+func runInterviewEvaluationConsumer(ctx context.Context, consumerGroup sarama.ConsumerGroup, consumer *event.InterviewEvaluationConsumer) {
+	for {
+		if err := consumerGroup.Consume(ctx, []string{event.InterviewEvaluationTopic}, consumer); err != nil {
+			log.Printf("consume interview evaluation event failed: %v", err)
+		}
+		if ctx.Err() != nil {
+			return
 		}
 	}
 }

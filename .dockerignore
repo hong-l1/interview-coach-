@@ -1,0 +1,12 @@
+.git
+.github
+.gocache
+.idea
+.tmp
+frontend
+logs
+doc
+*.pdf
+*.exe
+*.log
+.env
