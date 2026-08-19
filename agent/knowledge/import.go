@@ -1,8 +1,8 @@
 package main
 
 import (
-	"awesomeProject4/Init"
 	"awesomeProject4/agent/knowledge/ragkit"
+	"awesomeProject4/backend/Init"
 	"context"
 	"github.com/joho/godotenv"
 	"log"
