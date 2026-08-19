@@ -28,6 +28,10 @@ func main() {
 
 	embedder := rag.NewEmbedder(ctx)
 	indexer := rag.NewIndexer(ctx, embedder, manager.Client)
+	// === ragkit 接线点（标准化 + 路由切块），默认关闭，手动切换时启用 ===
+	// 启用方式：设置环境变量 RAGKIT_ENABLED=1，并替换下方 splitter.Transform 为 ragkit.Split
+	// _ = ragkit.NormalizeDocs(docs)
+	// _ = ragkit.DefaultRouter()
 	splitter := rag.NewRecursiveSplit(ctx, embedder)
 
 	totalChunks := 0

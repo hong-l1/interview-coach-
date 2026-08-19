@@ -53,6 +53,10 @@ func GetRetrieverWithInput(ctx context.Context, input *RetrieverInput) (*Retriev
 	defer cancel()
 
 	manager := Init.NewMilvusManger()
+	// === ragkit 接线点（门控 + 动态 TopK），默认关闭 ===
+	// 启用方式：设置环境变量 RAGKIT_ENABLED=1，并把本函数返回替换为 ragkit.Retrieve
+	// res, _ := ragkit.Retrieve(searchCtx, retrieval.NewMilvusSearcher(manager.Client), query, input.Filter, retrieval.DefaultRetrieveProfile())
+	// return toRetrieverOutput(res), nil
 	docs, err := rag.HybridRetrieve(searchCtx, manager.Client, query, topK, input.Filter)
 	if err != nil {
 		return nil, err
