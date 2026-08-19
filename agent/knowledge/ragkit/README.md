@@ -3,17 +3,19 @@
 把 rag-retrievalOps 的 标准化/切块/检索增强/精简治理 四块精华在 awesomeProject4 内重写，
 对齐现有栈（Milvus + eino + Ark），纯 Go 包 API，零现有代码改动。
 
-## 快速验证
+## 使用方式（纯包 API）
 
-```bash
-# 入库
-go run ./agent/knowledge/ragkit/cmd/ragkit-cli ingest doc/某文件.docx
+```go
+// 入库链路：normalize → split → 双 SHA1 元数据 → store（ragkit.Index 全封装）
+n, err := ragkit.Index(ctx, embedder, indexer, "doc/某文件.docx") // n = 入库 chunk 数
 
-# 检索
-go run ./agent/knowledge/ragkit/cmd/ragkit-cli retrieve "红黑树 插入"
+// 分步：标准化 + 路由切块 + 父子元数据
+nds := ragkit.NormalizeDocs(docs)                  // []*canonical.NormalizedDocument
+chunks, _ := ragkit.Split(ctx, nds[0], ragkit.DefaultRouter(), "doc-1")
 
-# 索引健康
-go run ./agent/knowledge/ragkit/cmd/ragkit-cli health
+// 检索链路：searcher → 动态 TopK → 后处理（去重/重排/门控）
+res, _ := ragkit.Retrieve(ctx, searcher, query, "", retrieval.DefaultRetrieveProfile())
+// res.Items / res.EvidenceGate / res.Metrics
 ```
 
 ## 无感替换（手动切换）
