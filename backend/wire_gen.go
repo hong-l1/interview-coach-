@@ -4,10 +4,10 @@
 //go:build !wireinject
 // +build !wireinject
 
-package main
+package backend
 
 import (
-	"awesomeProject4/Init"
+	Init2 "awesomeProject4/backend/Init"
 	"awesomeProject4/backend/api/handler"
 	"awesomeProject4/backend/api/server"
 	"awesomeProject4/backend/event"
@@ -20,15 +20,15 @@ import (
 )
 
 func InitializeServer() (*gin.Engine, sarama.ConsumerGroup, *event.InterviewEvaluationConsumer, error) {
-	log := Init.InitLogger()
-	db, err := Init.InitMysql()
+	log := Init2.InitLogger()
+	db, err := Init2.InitMysql()
 	if err != nil {
 		return nil, nil, nil, err
 	}
-	cmdable := Init.InitRedis()
-	client := Init.NewKafka()
-	syncProducer := Init.NewKafkaProducer(client)
-	consumerGroup := Init.NewConsumer("interview-evaluation-consumer", client)
+	cmdable := Init2.InitRedis()
+	client := Init2.NewKafka()
+	syncProducer := Init2.NewKafkaProducer(client)
+	consumerGroup := Init2.NewConsumer("interview-evaluation-consumer", client)
 	userDAO := dao.NewUserDAO(db)
 	userModelDAO := dao.NewUserModelDAO(db)
 	resumeDAO := dao.NewResumeDAO(db)

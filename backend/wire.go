@@ -1,10 +1,10 @@
 //go:build wireinject
 // +build wireinject
 
-package main
+package backend
 
 import (
-	"awesomeProject4/Init"
+	Init2 "awesomeProject4/backend/Init"
 	"awesomeProject4/backend/api/handler"
 	"awesomeProject4/backend/api/server"
 	"awesomeProject4/backend/event"
@@ -18,13 +18,13 @@ import (
 )
 
 var providerSet = wire.NewSet(
-	Init.InitLogger,
-	Init.InitMysql,
-	Init.InitRedis,
-	Init.NewKafka,
-	Init.NewKafkaProducer,
+	Init2.InitLogger,
+	Init2.InitMysql,
+	Init2.InitRedis,
+	Init2.NewKafka,
+	Init2.NewKafkaProducer,
 	wire.Value("interview-evaluation-consumer"),
-	Init.NewConsumer,
+	Init2.NewConsumer,
 	dao.NewUserDAO,
 	dao.NewUserModelDAO,
 	dao.NewResumeDAO,

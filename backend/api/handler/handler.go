@@ -3,9 +3,9 @@ package handler
 import (
 	"awesomeProject4/backend/api/utils"
 	"awesomeProject4/backend/event"
+	"awesomeProject4/backend/pkg/zapx"
 	"awesomeProject4/backend/repository/dao"
 	userservice "awesomeProject4/backend/service"
-	"awesomeProject4/pkg/zapx"
 	"github.com/IBM/sarama"
 
 	"github.com/gin-gonic/gin"

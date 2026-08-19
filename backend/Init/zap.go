@@ -1,7 +1,7 @@
 package Init
 
 import (
-	"awesomeProject4/pkg/zapx"
+	"awesomeProject4/backend/pkg/zapx"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"

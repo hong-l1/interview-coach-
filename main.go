@@ -1,6 +1,7 @@
 package main
 
 import (
+	"awesomeProject4/backend"
 	"awesomeProject4/backend/event"
 	"context"
 	"github.com/IBM/sarama"
@@ -8,7 +9,7 @@ import (
 )
 
 func main() {
-	server, consumerGroup, evaluationConsumer, err := InitializeServer()
+	server, consumerGroup, evaluationConsumer, err := backend.InitializeServer()
 	if err != nil {
 		log.Fatalf("initialize server failed: %v", err)
 	}

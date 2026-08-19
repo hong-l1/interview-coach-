@@ -37,3 +37,6 @@ dumped_hertz_remote_config.json
 todolist.txt
 .gocache
 .tmp
+/frontend
+/model.txt
+/.env
