@@ -2,7 +2,8 @@ package tool
 
 import (
 	"awesomeProject4/Init"
-	"awesomeProject4/agent/knowledge/rag"
+	"awesomeProject4/agent/knowledge/ragkit"
+	"awesomeProject4/agent/knowledge/ragkit/retrieval"
 	"context"
 	"fmt"
 	"strings"
@@ -53,22 +54,23 @@ func GetRetrieverWithInput(ctx context.Context, input *RetrieverInput) (*Retriev
 	defer cancel()
 
 	manager := Init.NewMilvusManger()
-	// === ragkit 接线点（门控 + 动态 TopK），默认关闭 ===
-	// 启用方式：设置环境变量 RAGKIT_ENABLED=1，并把本函数返回替换为 ragkit.Retrieve
-	// res, _ := ragkit.Retrieve(searchCtx, retrieval.NewMilvusSearcher(manager.Client), query, input.Filter, retrieval.DefaultRetrieveProfile())
-	// return toRetrieverOutput(res), nil
-	docs, err := rag.HybridRetrieve(searchCtx, manager.Client, query, topK, input.Filter)
+	searcher := ragkit.NewMilvusSearcher(searchCtx, manager.Client)
+
+	// ragkit 检索链路：动态 TopK + 去重 + Jaccard 重排 + 证据门控
+	profile := retrieval.DefaultRetrieveProfile()
+	profile.TopK.BaseFinalTopK = topK // 尊重调用方 top_k
+	res, err := ragkit.Retrieve(searchCtx, searcher, query, input.Filter, profile)
 	if err != nil {
 		return nil, err
 	}
 
-	items := make([]RetrieverDoc, 0, len(docs))
-	for _, doc := range docs {
+	items := make([]RetrieverDoc, 0, len(res.Items))
+	for _, it := range res.Items {
 		items = append(items, RetrieverDoc{
-			ID:       doc.ID,
-			Content:  doc.Content,
-			Score:    doc.Score(),
-			Metadata: doc.MetaData,
+			ID:       it.ID,
+			Content:  it.Content,
+			Score:    it.Score,
+			Metadata: it.Metadata,
 		})
 	}
 	return &RetrieverOutput{

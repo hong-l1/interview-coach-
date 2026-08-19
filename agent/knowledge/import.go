@@ -2,13 +2,12 @@ package main
 
 import (
 	"awesomeProject4/Init"
-	"awesomeProject4/agent/knowledge/rag"
+	"awesomeProject4/agent/knowledge/ragkit"
 	"context"
+	"github.com/joho/godotenv"
 	"log"
 	"path/filepath"
 	"sort"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -26,42 +25,21 @@ func main() {
 	}
 	sort.Strings(files)
 
-	embedder := rag.NewEmbedder(ctx)
-	indexer := rag.NewIndexer(ctx, embedder, manager.Client)
-	// === ragkit 接线点（标准化 + 路由切块），默认关闭，手动切换时启用 ===
-	// 启用方式：设置环境变量 RAGKIT_ENABLED=1，并替换下方 splitter.Transform 为 ragkit.Split
-	// _ = ragkit.NormalizeDocs(docs)
-	// _ = ragkit.DefaultRouter()
-	splitter := rag.NewRecursiveSplit(ctx, embedder)
+	embedder := ragkit.NewEmbedder(ctx)
+	indexer := ragkit.NewIndexer(ctx, embedder, manager.Client)
 
 	totalChunks := 0
 	for _, path := range files {
 		name := filepath.Base(path)
 		log.Printf("processing %s", name)
 
-		docs, err := rag.NewDocumentsLoader(ctx, path)
+		n, err := ragkit.Index(ctx, embedder, indexer, path)
 		if err != nil {
 			log.Printf("skip %s: %v", name, err)
 			continue
 		}
-
-		chunks, err := splitter.Transform(ctx, docs)
-		if err != nil {
-			log.Printf("skip %s: %v", name, err)
-			continue
-		}
-
-		meta := rag.NewDocumentMetaData(name, "cv_paper_eval")
-		chunks = rag.EnrichDocumentsWithMetadata(ctx, chunks, meta)
-
-		ids, err := indexer.Store(ctx, chunks)
-		if err != nil {
-			log.Printf("skip %s: %v", name, err)
-			continue
-		}
-
-		totalChunks += len(ids)
-		log.Printf("imported %s: %d chunks", name, len(ids))
+		log.Printf("imported %s: %d chunks", name, n)
+		totalChunks += n
 	}
 	log.Printf("done: %d files, %d chunks", len(files), totalChunks)
 	log.Printf("flush completed")

@@ -1,4 +1,4 @@
-package rag
+package ragkit
 
 import (
 	"context"
@@ -14,6 +14,8 @@ import (
 	"github.com/cloudwego/eino/schema"
 )
 
+// NewDocumentsLoader 加载单个文件（pdf/docx 走专用解析器，其余走 TextParser），
+// 文件名作为文档 ID。文件不存在时 panic（沿用 rag 包行为）。
 func NewDocumentsLoader(ctx context.Context, path string) ([]*schema.Document, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		panic(fmt.Sprintf("文件不存在: %s, 错误: %v", path, err))

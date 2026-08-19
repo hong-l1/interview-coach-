@@ -3,7 +3,7 @@ package retrieval
 import (
 	"context"
 
-	"awesomeProject4/agent/knowledge/rag"
+	"github.com/cloudwego/eino/components/embedding"
 	"github.com/cloudwego/eino/schema"
 	"github.com/milvus-io/milvus/client/v2/milvusclient"
 )
@@ -13,17 +13,18 @@ type Searcher interface {
 	Search(ctx context.Context, query string, topK int, filter string) ([]*schema.Document, error)
 }
 
-// milvusSearcher 适配现有 rag.HybridRetrieve。
+// milvusSearcher 适配 RRF 混合检索（HybridRetrieve）。
 type milvusSearcher struct {
-	client *milvusclient.Client
+	client   *milvusclient.Client
+	embedder embedding.Embedder
 }
 
-// NewMilvusSearcher 构造一个基于 milvusclient 的 Searcher。
-func NewMilvusSearcher(client *milvusclient.Client) Searcher {
-	return &milvusSearcher{client: client}
+// NewMilvusSearcher 构造一个基于 milvusclient 的 Searcher，embedder 由调用方注入。
+func NewMilvusSearcher(client *milvusclient.Client, embedder embedding.Embedder) Searcher {
+	return &milvusSearcher{client: client, embedder: embedder}
 }
 
-// Search 委托给 rag.HybridRetrieve。
+// Search 委托给 HybridRetrieve。
 func (m *milvusSearcher) Search(ctx context.Context, query string, topK int, filter string) ([]*schema.Document, error) {
-	return rag.HybridRetrieve(ctx, m.client, query, topK, filter)
+	return HybridRetrieve(ctx, m.client, m.embedder, query, topK, filter)
 }

@@ -3,7 +3,6 @@ package ragkit
 import (
 	"context"
 
-	"awesomeProject4/agent/knowledge/rag"
 	"awesomeProject4/agent/knowledge/ragkit/canonical"
 	"awesomeProject4/agent/knowledge/ragkit/chunking"
 	"awesomeProject4/agent/knowledge/ragkit/retrieval"
@@ -11,10 +10,17 @@ import (
 	"github.com/cloudwego/eino-ext/components/embedding/ark"
 	"github.com/cloudwego/eino-ext/components/indexer/milvus2"
 	"github.com/cloudwego/eino/schema"
+	"github.com/milvus-io/milvus/client/v2/milvusclient"
 )
 
 // Version 是 ragkit 实现版本号，用于审计与元数据留痕。
 const Version = "ragkit-v0"
+
+// NewMilvusSearcher 便捷构造：用默认 Ark embedder + Milvus client 组装 Searcher，
+// 供检索链路（ragkit.Retrieve）使用。
+func NewMilvusSearcher(ctx context.Context, client *milvusclient.Client) retrieval.Searcher {
+	return retrieval.NewMilvusSearcher(client, NewEmbedder(ctx))
+}
 
 // Retrieve 用 searcher 搜索 + 后处理（facade 入口）。
 func Retrieve(ctx context.Context, searcher retrieval.Searcher, query, filter string, profile retrieval.RetrieveProfile) (retrieval.Result, error) {
@@ -65,7 +71,7 @@ func Split(ctx context.Context, nd *canonical.NormalizedDocument, router *chunki
 // Index 是入库全链路 facade：load → normalize → split → enrich metadata（双SHA1）→ store。
 // 返回入库 chunk 数。
 func Index(ctx context.Context, embedder *ark.Embedder, indexer *milvus2.Indexer, docPath string) (int, error) {
-	docs, err := rag.NewDocumentsLoader(ctx, docPath)
+	docs, err := NewDocumentsLoader(ctx, docPath)
 	if err != nil {
 		return 0, err
 	}

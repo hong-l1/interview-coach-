@@ -59,10 +59,6 @@ github.com/cloudwego/eino-ext/components/document/parser/docx v0.0.0-20260523100
 github.com/cloudwego/eino-ext/components/document/parser/docx v0.0.0-20260523100706-3a34358d6fd1/go.mod h1:7Nfu+tf9OkdI8Fy5VRi9Xap13OGVV8SXlpj+GHbaWQ8=
 github.com/cloudwego/eino-ext/components/document/parser/pdf v0.0.0-20260323112355-f061db7e8419 h1:kw67tDHJ8vBI4eaB2Gb11kcLFrnQuCX8yFF9onU7CEQ=
 github.com/cloudwego/eino-ext/components/document/parser/pdf v0.0.0-20260323112355-f061db7e8419/go.mod h1:kHC3xkGM/gv3IHpOk33p75BfBaEIYATOs2XmYFKffcs=
-github.com/cloudwego/eino-ext/components/document/transformer/splitter/recursive v0.0.0-20260523100706-3a34358d6fd1 h1:5qkJjIqtiKuAa+52KNNZOshuVZz8avezO5OLm2YLzVA=
-github.com/cloudwego/eino-ext/components/document/transformer/splitter/recursive v0.0.0-20260523100706-3a34358d6fd1/go.mod h1:9R0RQrQSpg1JaNnRtw7+RfRAAv0HgdE348YnrlZ6coo=
-github.com/cloudwego/eino-ext/components/document/transformer/splitter/semantic v0.0.0-20260311121809-88ebb0eecbdb h1:3Tbhm0iXKC7mjvY45RV9riV+PvMSm2Y1fxE7WYuPBA0=
-github.com/cloudwego/eino-ext/components/document/transformer/splitter/semantic v0.0.0-20260311121809-88ebb0eecbdb/go.mod h1:Ov33JMUewdOoUgJbYNJt3qL7KQDVHYpoVBCjJXsz8sw=
 github.com/cloudwego/eino-ext/components/embedding/ark v0.1.1 h1:PM/+XAvJtrBqFlBY15ws0pb0+92XKHQv0ei3M7PIJcQ=
 github.com/cloudwego/eino-ext/components/embedding/ark v0.1.1/go.mod h1:6O6x0fHfM3uCLr3lX1DnB/my7fC3WRUA5hpkCkrkZrg=
 github.com/cloudwego/eino-ext/components/indexer/milvus2 v0.0.0-20260323112355-f061db7e8419 h1:H32Giz+X4b/d3eo1vscceR7aIUtqKtr4mMSTOoSfbMo=
@@ -365,8 +361,6 @@ github.com/mgutz/ansi v0.0.0-20170206155736-9520e82c474b/go.mod h1:01TrycV0kFyex
 github.com/microcosm-cc/bluemonday v1.0.2/go.mod h1:iVP4YcDBq+n/5fb23BhYFvIMq/leAFZyRl6bYmGDlGc=
 github.com/milvus-io/milvus-proto/go-api/v2 v2.6.3 h1:w7IBrU25KULWNlHKoKwx6ruTsDAmzrWknotIc6A4ys4=
 github.com/milvus-io/milvus-proto/go-api/v2 v2.6.3/go.mod h1:/6UT4zZl6awVeXLeE7UGDWZvXj3IWkRsh3mqsn0DiAs=
-github.com/milvus-io/milvus-sdk-go/v2 v2.4.2 h1:Xqf+S7iicElwYoS2Zly8Nf/zKHuZsNy1xQajfdtygVY=
-github.com/milvus-io/milvus-sdk-go/v2 v2.4.2/go.mod h1:ulO1YUXKH0PGg50q27grw048GDY9ayB4FPmh7D+FFTA=
 github.com/milvus-io/milvus/client/v2 v2.6.1 h1:JGV+2JoZypc0ORnVj41ZWLdz9EpBGcwXCliIFXFW1f4=
 github.com/milvus-io/milvus/client/v2 v2.6.1/go.mod h1:MnickP646pUKhfOS4JQD3uMUukDXhJKpdTXk467MXuU=
 github.com/milvus-io/milvus/pkg/v2 v2.6.3 h1:WDf4mXFWL5Sk/V87yLwRKq24MYMkjS2YA6qraXbLbJA=

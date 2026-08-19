@@ -8,8 +8,6 @@ require (
 	github.com/cloudwego/eino-ext/components/document/loader/file v0.0.0-20260311121809-88ebb0eecbdb
 	github.com/cloudwego/eino-ext/components/document/parser/docx v0.0.0-20260523100706-3a34358d6fd1
 	github.com/cloudwego/eino-ext/components/document/parser/pdf v0.0.0-20260323112355-f061db7e8419
-	github.com/cloudwego/eino-ext/components/document/transformer/splitter/recursive v0.0.0-20260523100706-3a34358d6fd1
-	github.com/cloudwego/eino-ext/components/document/transformer/splitter/semantic v0.0.0-20260311121809-88ebb0eecbdb
 	github.com/cloudwego/eino-ext/components/embedding/ark v0.1.1
 	github.com/cloudwego/eino-ext/components/indexer/milvus2 v0.0.0-20260323112355-f061db7e8419
 	github.com/cloudwego/eino-ext/components/model/openai v0.1.10
@@ -21,7 +19,6 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.7.0
 	github.com/joho/godotenv v1.5.1
-	github.com/milvus-io/milvus-sdk-go/v2 v2.4.2
 	github.com/milvus-io/milvus/client/v2 v2.6.1
 	github.com/redis/go-redis/v9 v9.19.0
 	github.com/yuin/goldmark v1.8.5

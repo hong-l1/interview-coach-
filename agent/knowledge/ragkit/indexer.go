@@ -1,13 +1,16 @@
-package rag
+package ragkit
 
 import (
 	"context"
+	"os"
+
 	"github.com/cloudwego/eino-ext/components/embedding/ark"
 	"github.com/cloudwego/eino-ext/components/indexer/milvus2"
 	"github.com/milvus-io/milvus/client/v2/milvusclient"
-	"os"
 )
 
+// NewIndexer 构造 Milvus indexer：dense 1024 维 COSINE HNSW(M16, ef200)
+// + BM25 sparse + content 中文字典，集合名来自环境变量 collection。
 func NewIndexer(ctx context.Context, embedder *ark.Embedder, client *milvusclient.Client) *milvus2.Indexer {
 	indexer, err := milvus2.NewIndexer(ctx, &milvus2.IndexerConfig{
 		Client:     client,
@@ -20,7 +23,7 @@ func NewIndexer(ctx context.Context, embedder *ark.Embedder, client *milvusclien
 			IndexBuilder: milvus2.NewSparseInvertedIndexBuilder().WithDropRatioBuild(0.2),
 		},
 		Vector: &milvus2.VectorConfig{
-			Dimension:    2048,
+			Dimension:    1024,
 			MetricType:   milvus2.COSINE,
 			IndexBuilder: milvus2.NewHNSWIndexBuilder().WithM(16).WithEfConstruction(200),
 			VectorField:  "vector",
